@@ -43,6 +43,17 @@
       },
       "cost": 0,
       "services": []
+    },
+    {
+      "id": "c6e6",
+      "name": "Novo projeto",
+      "budget": "922",
+      "category": {
+        "id": "4",
+        "name": "Planejamento"
+      },
+      "cost": 0,
+      "services": []
     }
   ],
   "categories": [
