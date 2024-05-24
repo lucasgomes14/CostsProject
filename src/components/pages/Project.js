@@ -15,6 +15,7 @@ function Project() {
 
     const [project, setProject] = useState()
     const [showProjectForm, setShowProjectForm] = useState(false)
+    const [showServiceForm, setShowServiceForm] = useState(false)
     const [message, setMessage] = useState("")
     const [type, setType] = useState("")
 
@@ -33,14 +34,20 @@ function Project() {
                 .catch(err => console.log(err))
         }, 300)
     }, [id])
-
+    
     function toggleProjectForm() {
         setShowProjectForm(!showProjectForm)
     }
+    
+    function toggleServiceForm() {
+        setShowServiceForm(!showServiceForm)
+    }
 
     function editPost(project) {
+        setMessage("")
+
         //budget validation
-        if(project.budget < project.cost) {
+        if (project.budget < project.cost) {
             setMessage("O orçamento não pode ser menor que o custo do projeto!")
             setType("error")
             return false
@@ -49,19 +56,19 @@ function Project() {
         fetch(`http://localhost:5000/projects/${id}`, {
             method: "PATCH",
             headers: {
-                "Content-Type" : "application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(project),
         })
-        .then(resp => resp.json())
-        .then(data => {
-            setProject(data)
-            setShowProjectForm(false)
+            .then(resp => resp.json())
+            .then(data => {
+                setProject(data)
+                setShowProjectForm(false)
 
-            setMessage("Projeto atualizado!")
-            setType("success")
-        })
-        .catch(err => console.log(err))
+                setMessage("Projeto atualizado!")
+                setType("success")
+            })
+            .catch(err => console.log(err))
     }
 
     return (
@@ -69,7 +76,7 @@ function Project() {
             {project ? (
                 <div className={styles.project_details}>
                     <Container customClass="column">
-                        {message && <Message type={type} msg={message}/>}
+                        {message && <Message type={type} msg={message} />}
                         <div className={styles.details_container}>
                             <h1>Projeto: {project.name}</h1>
                             <button className={styles.btn} onClick={toggleProjectForm}>
@@ -97,6 +104,19 @@ function Project() {
                                 </div>
                             )}
                         </div>
+                        <div className={styles.service_form_container}>
+                            <h2>Adicione um serviço:</h2>
+                            <button className={styles.btn} onClick={toggleServiceForm}>
+                                {!showServiceForm ? "Adicionar Serviço" : "Fechar"}
+                            </button>
+                            <div className={styles.project_info}>
+                                {showServiceForm && <div>Formulário do serviço</div>}
+                            </div>
+                        </div>
+                        <h2>Serviços</h2>
+                        <Container customClass="start"> 
+                            <p>Itens do serviço</p>
+                        </Container>
                     </Container>
                 </div>
             )
